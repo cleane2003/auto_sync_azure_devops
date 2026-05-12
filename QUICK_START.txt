@@ -1,0 +1,98 @@
+🚀 GUIA RÁPIDO - Azure DevOps Auto Sync
+
+═══════════════════════════════════════════════════════════════
+
+## ⚡ Início Rápido (5 minutos)
+
+### 1️⃣  Instalar dependências
+   
+   cd c:\Projects\Suporte\auto_sync
+   setup.bat
+   
+   OU manualmente:
+   
+   pip install -r requirements.txt
+
+### 2️⃣  Verificar configuração
+
+   python verify.py
+
+   Se tudo OK, vai mostrar: ✅ Tudo pronto!
+
+### 3️⃣  Executar agora
+
+   python main.py
+
+   Isso vai:
+   ✓ Acessar Azure DevOps
+   ✓ Buscar user stories na coluna "Agent Ready"
+   ✓ Criar arquivos .md em C:\Projects\deliflow-monorepo\docs\specs\
+
+═══════════════════════════════════════════════════════════════
+
+## ⏰ Agendar para executar automaticamente
+
+### Windows (Recomendado)
+
+1. Clique com botao direito no PowerShell -> "Executar como Administrador"
+
+2. Execute:
+   
+   powershell -ExecutionPolicy Bypass -File "C:\Projects\Suporte\auto_sync\scheduler.ps1" -Action Install -Frequency Daily -Hour 9
+
+3. Pronto! Vai rodar todo dia as 9:00 AM
+
+### Outras opcoes de agendamento:
+
+   # Cada hora
+   powershell -ExecutionPolicy Bypass -File "C:\Projects\Suporte\auto_sync\scheduler.ps1" -Action Install -Frequency Hourly
+
+   # Toda segunda-feira as 14:00
+   powershell -ExecutionPolicy Bypass -File "C:\Projects\Suporte\auto_sync\scheduler.ps1" -Action Install -Frequency Weekly -Hour 14
+
+   # Remover agendamento
+   powershell -ExecutionPolicy Bypass -File "C:\Projects\Suporte\auto_sync\scheduler.ps1" -Action Uninstall
+
+═══════════════════════════════════════════════════════════════
+
+## 📂 Onde os specs aparecem?
+
+   C:\Projects\deliflow-monorepo\docs\specs\
+
+   Exemplo de arquivo:
+   📄 [US01 - Login] Autenticação Unificada por E-mail e Senha.md
+
+═══════════════════════════════════════════════════════════════
+
+## 📊 Ver status / logs
+
+   # Último log de sincronização
+   type logs\sync.log
+
+   # Logs do agendador
+   type logs\scheduler.log
+
+═══════════════════════════════════════════════════════════════
+
+## ❓ Problemas?
+
+   ❌ "Python não encontrado"
+   → Instale Python 3.8+ em https://www.python.org
+
+   ❌ "PAT expirou"
+   → Gere novo em: https://dev.azure.com/mosten-core/_usersSettings/tokens
+   → Atualize em .env
+
+   ❌ "Nenhuma user story encontrada"
+   → Verifique se há items na coluna "Agent Ready"
+
+   ❌ Specs não aparecem
+   → Confirme pasta existe: C:\Projects\deliflow-monorepo\docs
+
+═══════════════════════════════════════════════════════════════
+
+## 📖 Documentação completa
+
+   Veja: README.md
+
+═══════════════════════════════════════════════════════════════
