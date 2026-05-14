@@ -25,8 +25,9 @@
 
    Isso vai:
    ✓ Acessar Azure DevOps
-   ✓ Buscar user stories na coluna "Agent Ready"
+   ✓ Buscar user stories e features na coluna "Agent Ready"
    ✓ Criar arquivos .md em C:\Projects\deliflow-monorepo\docs\specs\
+   ✓ Criar arquivos .md em C:\Projects\deliflow-monorepo\docs\features\
 
 ═══════════════════════════════════════════════════════════════
 
@@ -55,12 +56,17 @@
 
 ═══════════════════════════════════════════════════════════════
 
-## 📂 Onde os specs aparecem?
+## 📂 Onde os arquivos aparecem?
 
    C:\Projects\deliflow-monorepo\docs\specs\
 
    Exemplo de arquivo:
    📄 [US01 - Login] Autenticação Unificada por E-mail e Senha.md
+
+   C:\Projects\deliflow-monorepo\docs\features\
+
+   Exemplo de arquivo:
+   📄 Feature de Autenticação.md
 
 ═══════════════════════════════════════════════════════════════
 
@@ -85,6 +91,9 @@
 
    ❌ "Nenhuma user story encontrada"
    → Verifique se há items na coluna "Agent Ready"
+
+   ❌ "Nenhuma feature encontrada"
+   → Verifique se há features na coluna "Agent Ready"
 
    ❌ Specs não aparecem
    → Confirme pasta existe: C:\Projects\deliflow-monorepo\docs

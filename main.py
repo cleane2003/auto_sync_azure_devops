@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Entry point - Azure DevOps User Story to Specs Converter
+Entry point - Azure DevOps Feature e User Story Sync
 Pode ser executado manualmente ou por agendador
 """
 
@@ -24,7 +24,7 @@ logger = logging.getLogger(__name__)
 def main():
     """Executa a sincronização"""
     print("\n" + "=" * 60)
-    print("🤖 Azure DevOps Auto Sync - User Stories to Specs")
+    print("🤖 Azure DevOps Auto Sync - Features, US e Specs")
     print(f"⏰ {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
     print("=" * 60 + "\n")
 
@@ -34,8 +34,11 @@ def main():
         print("\n" + "=" * 60)
         print("📊 RESULTADO FINAL")
         print(f"   ✓ Arquivos criados: {result.get('processed', 0)}")
+        print(f"   ✓ Features criadas: {result.get('feature_processed', 0)}")
         print(f"   ⊘ Pulados: {result.get('skipped', 0)}")
+        print(f"   ⊘ Features puladas: {result.get('feature_skipped', 0)}")
         print(f"   📦 Total processado: {result.get('total', 0)}")
+        print(f"   📦 Total de features: {result.get('feature_total', 0)}")
         print("=" * 60)
         
         return 0

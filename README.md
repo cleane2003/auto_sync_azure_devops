@@ -1,14 +1,16 @@
-# 🤖 Azure DevOps Auto Sync - User Stories to Specs
+# 🤖 Azure DevOps Auto Sync - Features, User Stories e Specs
 
-Automação que lê user stories da coluna **"Agent Ready"** no Azure DevOps e cria arquivos specs em Markdown na pasta `docs` do seu projeto.
+Automação que lê features e user stories da coluna **"Agent Ready"** no Azure DevOps e cria arquivos Markdown vinculados nas pastas `docs/features` e `docs/specs` do seu projeto.
 
 ## 📋 O que faz
 
 ✅ Acessa Azure DevOps via API  
-✅ Filtra user stories na coluna "Agent Ready"  
-✅ Lê título, descrição e critérios de aceitação  
+✅ Filtra user stories e features na coluna "Agent Ready"  
+✅ Lê título, descrição, critérios de aceitação e relacionamentos  
 ✅ Gera arquivos `.md` formatados  
-✅ Salva em `C:\Projects\deliflow-monorepo\docs\specs\`  
+✅ Salva specs em `C:\Projects\deliflow-monorepo\docs\specs\`  
+✅ Salva features em `C:\Projects\deliflow-monorepo\docs\features\`  
+✅ Cria links entre Feature, US e Spec  
 ✅ Pode rodar manualmente ou agendado  
 
 ## 🚀 Instalação
@@ -56,7 +58,7 @@ python main.py
 Saída esperada:
 ```
 ============================================================
-🤖 Azure DevOps Auto Sync - User Stories to Specs
+🤖 Azure DevOps Auto Sync - Features, US e Specs
 ⏰ 2026-05-12 14:30:45
 ============================================================
 
@@ -64,15 +66,19 @@ Saída esperada:
    - Organização: mosten-core
    - Projeto: ALO001-26
    - Pasta de saída: C:\Projects\deliflow-monorepo\docs\specs
+   - Pasta de features: C:\Projects\deliflow-monorepo\docs\features
    - Coluna monitorada: Agent Ready
 
 🚀 Iniciando sincronização...
    ✓ 5 user stories encontradas
+   ✓ 2 features encontradas
 
 ✅ SINCRONIZAÇÃO CONCLUÍDA
    ✓ Specs criados: 5
+   ✓ Features criadas: 2
    ⊘ Pulados: 0
    📁 Pasta: C:\Projects\deliflow-monorepo\docs\specs
+   📁 Features: C:\Projects\deliflow-monorepo\docs\features
 ```
 
 ### ⏰ Agendamento Automático (Windows)
@@ -117,9 +123,9 @@ auto_sync/
     └── scheduler.log      # Log do agendador
 ```
 
-## 📝 Formato dos Specs Gerados
+## 📝 Formato dos Arquivos Gerados
 
-Cada arquivo `.md` contém:
+Cada spec `.md` contém:
 
 ```markdown
 # Spec: [Título da User Story]
@@ -145,6 +151,30 @@ Cada arquivo `.md` contém:
 
 ## 📝 Detalhes Técnicos
 [...informações técnicas...]
+
+---
+
+**Gerado em:** 2026-05-12 14:30:45
+```
+
+Cada feature `.md` contém:
+
+```markdown
+# Feature: [Título da Feature]
+
+**ID:** 12345
+**Status:** Active
+**Atribuído a:** Dev Name
+
+---
+
+## 📋 Objetivo
+[Descrição da feature]
+
+---
+
+## 🔗 User Stories e Specs vinculadas
+- [US #123 - Item](../specs/Tema/US_123.md)
 
 ---
 
@@ -186,6 +216,10 @@ tail -f logs/sync.log
 ### Erro: "Nenhuma user story encontrada"
 → Verifique se há user stories na coluna "Agent Ready"  
 → Confirme que a coluna se chama exatamente "Agent Ready" (case-sensitive)
+
+### Erro: "Nenhuma feature encontrada"
+→ Verifique se há features na coluna "Agent Ready"  
+→ Confirme que o board de Features usa a mesma coluna
 
 ### Specs não aparecem na pasta
 → Verifique o caminho em `.env` (deve existir a pasta `C:\Projects\deliflow-monorepo\docs`)  

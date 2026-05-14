@@ -33,12 +33,15 @@ AZURE_AUTH = ("", AZURE_PAT)
 # Output Configuration
 DOCS_FOLDER = Path(os.getenv('DOCS_FOLDER', r'C:\Projects\deliflow-monorepo\docs'))
 SPECS_SUBFOLDER = DOCS_FOLDER / "specs"
+FEATURES_SUBFOLDER = DOCS_FOLDER / "features"
 
 # Ensure output folders exist
 SPECS_SUBFOLDER.mkdir(parents=True, exist_ok=True)
+FEATURES_SUBFOLDER.mkdir(parents=True, exist_ok=True)
 
 # Execution Configuration
 COLUMN_NAME = os.getenv('COLUMN_NAME', 'Agent Ready')
+FEATURE_COLUMN = os.getenv('FEATURE_COLUMN', 'In Progress')
 LOG_LEVEL = os.getenv('LOG_LEVEL', 'INFO')
 VERBOSE_CONFIG = _env_bool('AZURE_VERBOSE_CONFIG', False)
 
@@ -52,5 +55,7 @@ if VERBOSE_CONFIG:
     print(f"   - Organizacao: {AZURE_ORG}")
     print(f"   - Projeto: {AZURE_PROJECT}")
     print(f"   - Pasta de saida: {SPECS_SUBFOLDER}")
+    print(f"   - Pasta de features: {FEATURES_SUBFOLDER}")
     print(f"   - Coluna monitorada: {COLUMN_NAME}")
+    print(f"   - Coluna de features: {FEATURE_COLUMN}")
     print(f"   - Autenticacao: PAT ({AZURE_PAT[:10]}...)")

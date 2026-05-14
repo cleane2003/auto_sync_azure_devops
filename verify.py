@@ -20,7 +20,7 @@ checks_failed = 0
 print("1️⃣  Verificando imports...")
 try:
     from config import (
-        AZURE_ORG, AZURE_PROJECT, AZURE_AUTH, SPECS_SUBFOLDER,
+        AZURE_ORG, AZURE_PROJECT, AZURE_AUTH, SPECS_SUBFOLDER, FEATURES_SUBFOLDER,
         LOG_FILE, COLUMN_NAME
     )
     from azure_sync import AzureDevOpsSync
@@ -62,8 +62,20 @@ except Exception as e:
     print(f"   ❌ Erro ao verificar pasta: {e}\n")
     checks_failed += 1
 
-# Check 4: Azure DevOps connectivity
-print("4️⃣  Verificando conectividade com Azure DevOps...")
+# Check 4: Features folder
+print("4️⃣  Verificando pasta de features...")
+try:
+    if not FEATURES_SUBFOLDER.exists():
+        print(f"   ⚠️  Criando pasta: {FEATURES_SUBFOLDER}")
+        FEATURES_SUBFOLDER.mkdir(parents=True, exist_ok=True)
+    print(f"   ✅ Pasta: {FEATURES_SUBFOLDER}\n")
+    checks_passed += 1
+except Exception as e:
+    print(f"   ❌ Erro ao verificar pasta de features: {e}\n")
+    checks_failed += 1
+
+# Check 5: Azure DevOps connectivity
+print("5️⃣  Verificando conectividade com Azure DevOps...")
 try:
     from config import AZURE_API_URL, AZURE_AUTH
     # Usa WIQL (endpoint válido via POST) para validar acesso ao projeto
@@ -100,8 +112,8 @@ except Exception as e:
     print(f"   ❌ Erro ao conectar: {e}\n")
     checks_failed += 1
 
-# Check 5: Log file
-print("5️⃣  Verificando log...")
+# Check 6: Log file
+print("6️⃣  Verificando log...")
 try:
     LOG_FILE.parent.mkdir(parents=True, exist_ok=True)
     print(f"   ✅ Log: {LOG_FILE}\n")
@@ -110,8 +122,8 @@ except Exception as e:
     print(f"   ❌ Erro ao verificar log: {e}\n")
     checks_failed += 1
 
-# Check 6: Column name
-print("6️⃣  Verificando coluna monitorada...")
+# Check 7: Column name
+print("7️⃣  Verificando coluna monitorada...")
 print(f"   ℹ️  Coluna: {COLUMN_NAME}")
 print(f"   ℹ️  Especifique em .env se for diferente\n")
 checks_passed += 1
