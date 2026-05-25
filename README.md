@@ -8,7 +8,7 @@ Automação que lê features e user stories da coluna **"Agent Ready"** no Azure
 ✅ Filtra user stories e features na coluna "Agent Ready"  
 ✅ Lê título, descrição, critérios de aceitação e relacionamentos  
 ✅ Gera arquivos `.md` formatados  
-✅ Salva specs em `C:\Projects\deliflow-monorepo\docs\specs\`  
+✅ Salva specs em `C:\Projects\deliflow-monorepo\docs\specs\` organizando a pasta pela tag da US  
 ✅ Salva features em `C:\Projects\deliflow-monorepo\docs\features\`  
 ✅ Cria links entre Feature, US e Spec  
 ✅ Pode rodar manualmente ou agendado  
@@ -156,6 +156,8 @@ Cada spec `.md` contém:
 
 **Gerado em:** 2026-05-12 14:30:45
 ```
+
+As pastas das US/specs sao definidas pela primeira tag do item no Azure DevOps. Se a US estiver sem tag, o script mantem o fallback antigo baseado no tema do titulo.
 
 Cada feature `.md` contém:
 

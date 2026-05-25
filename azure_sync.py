@@ -187,10 +187,10 @@ class AzureDevOpsSync:
 
         return child_user_stories
 
-    def _build_spec_path(self, work_item_id: int, title: str) -> Path:
-        theme_folder = self.extract_theme_folder(title)
+    def _build_spec_path(self, work_item_id: int, title: str, tags: str = '') -> Path:
+        spec_folder_parts = self.extract_spec_folder_parts(title, tags)
         filename = self.build_output_filename(work_item_id, title)
-        return self.output_folder / theme_folder / filename
+        return self.output_folder.joinpath(*spec_folder_parts, filename)
 
     def _build_feature_path(self, work_item_id: int, title: str) -> Path:
         feature_folder = self.extract_feature_folder(title)
@@ -267,7 +267,7 @@ class AzureDevOpsSync:
             parent_feature_id = parent_feature.get('id', '')
             parent_feature_title = parent_feature_fields.get('System.Title', 'Sem título')
             parent_feature_path = self._build_feature_path(parent_feature_id, parent_feature_title)
-            spec_path = self.spec_paths_by_id.get(work_item_id) or self._build_spec_path(work_item_id, title)
+            spec_path = self.spec_paths_by_id.get(work_item_id) or self._build_spec_path(work_item_id, title, tags)
             feature_label = f"Feature #{parent_feature_id} - {parent_feature_title}"
             feature_link = self._build_azure_work_item_link(parent_feature_id, feature_label)
 
@@ -388,7 +388,8 @@ class AzureDevOpsSync:
         child_fields = child_work_item.get('fields', {})
         child_id = child_work_item.get('id', '')
         child_title = child_fields.get('System.Title', 'Sem título')
-        spec_path = self._build_spec_path(child_id, child_title)
+        child_tags = child_fields.get('System.Tags', '')
+        spec_path = self._build_spec_path(child_id, child_title, child_tags)
         feature_path = self._build_feature_path(feature_work_item.get('id', ''), feature_work_item.get('fields', {}).get('System.Title', 'Sem título'))
 
         if spec_path.exists():
@@ -453,6 +454,23 @@ class AzureDevOpsSync:
             return self.sanitize_filename(match.group(1).strip())
         return "Outros"
 
+    def extract_spec_folder_parts(self, title: str, tags: str) -> List[str]:
+        """Define a hierarquia da US priorizando tag e usando o tema como subpasta da tela."""
+        category_folder = ""
+        for raw_tag in re.split(r'[;,]', tags or ''):
+            clean_tag = self.sanitize_filename(raw_tag.strip())
+            if clean_tag:
+                category_folder = clean_tag
+                break
+
+        theme_folder = self.extract_theme_folder(title)
+        if category_folder:
+            if theme_folder and theme_folder != "Outros":
+                return [category_folder, theme_folder]
+            return [category_folder]
+
+        return [theme_folder]
+
     def build_output_filename(self, work_item_id: int, title: str) -> str:
         """Gera nome de arquivo de US no padrão [USxx_Tema]_Descricao.md."""
         us_match = re.match(r'^\[\s*US(\d+)\s*(?:-\s*)?([^\]]+)\]\s*(.*)$', (title or '').strip(), flags=re.IGNORECASE)
@@ -482,16 +500,12 @@ class AzureDevOpsSync:
         """Salva o spec em um arquivo MD"""
         try:
             work_item_id = work_item.get('id')
-            title = work_item.get('fields', {}).get('System.Title', 'unnamed')
+            fields = work_item.get('fields', {})
+            title = fields.get('System.Title', 'unnamed')
+            tags = fields.get('System.Tags', '')
 
-            # Criar subpasta por tema (ex.: "Cadastro de Minha Equipe")
-            theme_folder = self.extract_theme_folder(title)
-            folder_path = self.output_folder / theme_folder
-            folder_path.mkdir(parents=True, exist_ok=True)
-
-            # Criar nome do arquivo: ID_Titulo.md
-            filename = self.build_output_filename(work_item_id, title)
-            filepath = folder_path / filename
+            filepath = self._build_spec_path(work_item_id, title, tags)
+            filepath.parent.mkdir(parents=True, exist_ok=True)
             
             # Gerar conteúdo
             content = self.create_spec_markdown(work_item)
